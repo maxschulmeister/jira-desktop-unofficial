@@ -2,183 +2,1706 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <link rel="icon" href="./src/assets/tauri.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="assets/tauri.svg" />
-    <title>Jira Desktop Unofficial</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="/main.js" defer></script>
+
+    <!-- ══ Primary SEO ══ -->
+    <title>
+      Jira Desktop Unofficial — Lightweight Jira Desktop App Built with Tauri
+      (JDU)
+    </title>
+    <meta
+      name="description"
+      content="A minimal, distraction-free Jira desktop wrapper built with Tauri. Ultra-lightweight (~80 MB RAM), fast startup, privacy-focused. Works with Jira Cloud, Server & Data Center on Windows, macOS, and Linux."
+    />
+    <meta
+      name="keywords"
+      content="Jira desktop app, Jira wrapper, Tauri Jira, lightweight Jira, Jira client, Jira for desktop, Jira alternative electron, Jira macOS, Jira Windows, Jira Linux"
+    />
+    <meta name="author" content="cas8398" />
+    <link
+      rel="canonical"
+      href="https://cas8398.github.io/jira-desktop-unofficial/"
+    />
+    <meta name="robots" content="index, follow" />
+
+    <!-- ══ Open Graph ══ -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://cas8398.github.io/jira-desktop-unofficial/"
+    />
+    <meta
+      property="og:title"
+      content="Jira Desktop Unofficial — Lightweight Jira Desktop App"
+    />
+    <meta
+      property="og:description"
+      content="A minimal Jira desktop wrapper built with Tauri. ~80 MB RAM. No Electron. No bloat. Runs on Windows, macOS, and Linux."
+    />
+    <meta
+      property="og:image"
+      content="https://cas8398.github.io/jira-desktop-unofficial/screenshot/ss1.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Jira Desktop Unofficial app screenshot"
+    />
+    <meta property="og:site_name" content="Jira Desktop Unofficial" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- ══ Twitter / X Card ══ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://cas8398.github.io/jira-desktop-unofficial/"
+    />
+    <meta
+      name="twitter:title"
+      content="Jira Desktop Unofficial — Lightweight Jira Desktop App"
+    />
+    <meta
+      name="twitter:description"
+      content="A minimal Jira desktop wrapper built with Tauri. ~80 MB RAM. No Electron. No bloat."
+    />
+    <meta
+      name="twitter:image"
+      content="https://cas8398.github.io/jira-desktop-unofficial/screenshot/ss1.png"
+    />
+    <meta name="twitter:creator" content="@cas8398" />
+
+    <!-- ══ Alternate domain ══ -->
+    <link rel="alternate" href="https://flagodna.com/" hreflang="x-default" />
+
+    <!-- ══ JSON-LD Structured Data ══ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "SoftwareApplication",
+            "@id": "https://cas8398.github.io/jira-desktop-unofficial/#app",
+            "name": "Jira Desktop Unofficial",
+            "alternateName": "Jira Desktop",
+            "url": "https://cas8398.github.io/jira-desktop-unofficial/",
+            "description": "A minimal, distraction-free Jira desktop wrapper built with Tauri. Ultra-lightweight, privacy-focused, and compatible with Jira Cloud, Server, and Data Center.",
+            "applicationCategory": "DeveloperApplication",
+            "applicationSubCategory": "ProjectManagement",
+            "operatingSystem": ["Windows", "macOS", "Linux"],
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "downloadUrl": "https://github.com/cas8398/jira-desktop-unofficial/releases",
+            "softwareVersion": "0.1.3",
+            "fileSize": "~8MB",
+            "license": "https://github.com/cas8398/jira-desktop-unofficial/blob/master/LICENSE",
+            "codeRepository": "https://github.com/cas8398/jira-desktop-unofficial",
+            "softwareRequirements": "Windows, macOS, or Linux",
+            "featureList": [
+              "Dedicated distraction-free window",
+              "Ultra-lightweight (~80MB RAM)",
+              "Privacy-focused — no tracking or telemetry",
+              "Jira Cloud, Server, Data Center support",
+              "Smart URL memory",
+              "Native OS integration",
+              "Multi-platform"
+            ],
+            "screenshot": "https://cas8398.github.io/jira-desktop-unofficial/screenshot/ss1.png",
+            "author": {
+              "@type": "Person",
+              "@id": "https://www.cahyanudien.site/#author",
+              "name": "cas8398",
+              "url": "https://github.com/cas8398"
+            },
+            "maintainer": {
+              "@id": "https://www.cahyanudien.site/#author"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://cas8398.github.io/jira-desktop-unofficial/#website",
+            "url": "https://cas8398.github.io/jira-desktop-unofficial/",
+            "name": "Jira Desktop Unofficial",
+            "description": "Official landing page for Jira Desktop Unofficial",
+            "publisher": {
+              "@id": "https://www.cahyanudien.site/#author"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "@id": "https://cas8398.github.io/jira-desktop-unofficial/#faq",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "Why use Tauri instead of Electron?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Tauri uses your system's native webview instead of bundling Chromium. This results in ~80MB RAM usage vs 350MB+ for Electron apps, and a download size of ~8MB vs ~120MB."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Which Jira instances are supported?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Jira Desktop Unofficial works with Jira Cloud (*.atlassian.net), Jira Server (self-hosted), and Jira Data Center."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is it free and open source?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Jira Desktop Unofficial is completely free and open source under the MIT license."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <!-- ══ Fonts ══ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ═══════════════════════════════════════════
+       TOKENS
+    ═══════════════════════════════════════════ */
+      :root {
+        --bg: #0a0c10;
+        --surface: #12151c;
+        --surface-2: #1a1e28;
+        --border: rgba(255, 255, 255, 0.07);
+        --border-accent: rgba(82, 162, 255, 0.3);
+        --text: #e8eaf0;
+        --muted: #6b7280;
+        --accent: #52a2ff;
+        --accent-2: #7c3aed;
+        --accent-glow: rgba(82, 162, 255, 0.15);
+        --green: #22c55e;
+        --font-sans: "Sora", sans-serif;
+        --font-mono: "DM Mono", monospace;
+        --radius: 12px;
+        --radius-lg: 20px;
+      }
+
+      /* ═══════════════════════════════════════════
+       RESET
+    ═══════════════════════════════════════════ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        font-size: 16px;
+        line-height: 1.6;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      /* ═══════════════════════════════════════════
+       BACKGROUND GRID + GLOW
+    ═══════════════════════════════════════════ */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.02) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .glow-orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 0;
+      }
+      .glow-orb-1 {
+        width: 600px;
+        height: 600px;
+        background: rgba(82, 162, 255, 0.08);
+        top: -200px;
+        left: -150px;
+      }
+      .glow-orb-2 {
+        width: 500px;
+        height: 500px;
+        background: rgba(124, 58, 237, 0.06);
+        bottom: 100px;
+        right: -100px;
+      }
+
+      /* ═══════════════════════════════════════════
+       LAYOUT
+    ═══════════════════════════════════════════ */
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0 24px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* ═══════════════════════════════════════════
+       NAV
+    ═══════════════════════════════════════════ */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        border-bottom: 1px solid var(--border);
+        background: rgba(10, 12, 16, 0.85);
+        backdrop-filter: blur(20px);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 16px 0;
+      }
+      .nav-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 600;
+        font-size: 15px;
+        letter-spacing: -0.01em;
+      }
+      .nav-logo-icon {
+        width: 28px;
+        height: 28px;
+        background: var(--accent);
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+      }
+      .nav-logo-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+      .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        list-style: none;
+      }
+      .nav-links a {
+        font-size: 14px;
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--text);
+      }
+      .nav-cta {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 20px;
+        border-radius: 8px;
+        font-family: var(--font-sans);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        text-decoration: none;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.15);
+        background: var(--surface);
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #000;
+        font-weight: 600;
+        box-shadow: 0 0 20px rgba(82, 162, 255, 0.25);
+      }
+      .btn-primary:hover {
+        background: #74b8ff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 24px rgba(82, 162, 255, 0.4);
+      }
+      .btn-large {
+        padding: 14px 28px;
+        font-size: 15px;
+        border-radius: 10px;
+      }
+
+      /* ═══════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════ */
+      .hero {
+        padding: 100px 0 80px;
+        text-align: center;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 6px 14px;
+        border: 1px solid var(--border-accent);
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--accent);
+        background: rgba(82, 162, 255, 0.06);
+        margin-bottom: 28px;
+        animation: fadeUp 0.5s ease both;
+      }
+      .hero-badge .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--green);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(1.3);
+        }
+      }
+      .hero h1 {
+        font-size: clamp(38px, 6vw, 72px);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        line-height: 1.05;
+        margin-bottom: 24px;
+        animation: fadeUp 0.5s 0.1s ease both;
+      }
+      .hero h1 .accent {
+        color: var(--accent);
+      }
+      .hero h1 .quiet {
+        color: var(--muted);
+        font-weight: 300;
+      }
+      .hero-sub {
+        font-size: 18px;
+        color: var(--muted);
+        max-width: 520px;
+        margin: 0 auto 40px;
+        line-height: 1.7;
+        animation: fadeUp 0.5s 0.2s ease both;
+      }
+      .hero-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        animation: fadeUp 0.5s 0.3s ease both;
+      }
+      .hero-stats {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+        margin-top: 52px;
+        padding-top: 40px;
+        border-top: 1px solid var(--border);
+        animation: fadeUp 0.5s 0.4s ease both;
+      }
+      .stat {
+        text-align: center;
+      }
+      .stat-value {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        color: var(--text);
+      }
+      .stat-label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+        font-family: var(--font-mono);
+      }
+      .stat-divider {
+        width: 1px;
+        height: 36px;
+        background: var(--border);
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ═══════════════════════════════════════════
+       SCREENSHOT WINDOW
+    ═══════════════════════════════════════════ */
+      .screenshot-section {
+        padding: 0 0 100px;
+        position: relative;
+        z-index: 1;
+      }
+      .window-frame {
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        background: var(--surface);
+        box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04),
+          0 40px 100px rgba(0, 0, 0, 0.6), 0 0 60px rgba(82, 162, 255, 0.05);
+        animation: fadeUp 0.6s 0.5s ease both;
+      }
+      .window-titlebar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 16px;
+        background: var(--surface-2);
+        border-bottom: 1px solid var(--border);
+      }
+      .traffic-light {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .tl-red {
+        background: #ff5f56;
+      }
+      .tl-yellow {
+        background: #ffbd2e;
+      }
+      .tl-green {
+        background: #27c93f;
+      }
+      .window-url {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        font-size: 12px;
+      }
+      .window-url-bar {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 4px 12px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .window-content {
+        aspect-ratio: 16/9;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .mock-jira {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
+      .mock-sidebar {
+        width: 200px;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        padding: 20px 12px;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .mock-sidebar-item {
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 12px;
+        color: var(--muted);
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .mock-sidebar-item.active {
+        background: rgba(82, 162, 255, 0.1);
+        color: var(--accent);
+      }
+      .mock-main {
+        flex: 1;
+        padding: 24px;
+        overflow: hidden;
+      }
+      .mock-board-header {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text);
+      }
+      .mock-columns {
+        display: flex;
+        gap: 12px;
+        height: calc(100% - 50px);
+      }
+      .mock-col {
+        flex: 1;
+        background: var(--surface-2);
+        border-radius: 8px;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .mock-col-header {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 4px;
+      }
+      .mock-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px;
+        font-size: 11px;
+        color: var(--text);
+        line-height: 1.4;
+      }
+      .mock-card-tag {
+        display: inline-block;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 9px;
+        font-family: var(--font-mono);
+        margin-bottom: 5px;
+      }
+      .tag-blue {
+        background: rgba(82, 162, 255, 0.15);
+        color: var(--accent);
+      }
+      .tag-green {
+        background: rgba(34, 197, 94, 0.15);
+        color: var(--green);
+      }
+      .tag-purple {
+        background: rgba(124, 58, 237, 0.15);
+        color: #a78bfa;
+      }
+
+      /* ═══════════════════════════════════════════
+       FEATURES
+    ═══════════════════════════════════════════ */
+      .features {
+        padding: 80px 0;
+      }
+      .section-label {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--accent);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        margin-bottom: 16px;
+      }
+      .section-title {
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.1;
+        margin-bottom: 48px;
+      }
+      .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      .feature-card {
+        background: var(--bg);
+        padding: 32px;
+        transition: background 0.2s;
+      }
+      .feature-card:hover {
+        background: var(--surface);
+      }
+      .feature-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: var(--surface-2);
+        border: 1px solid var(--border);
+        display: grid;
+        place-items: center;
+        margin-bottom: 16px;
+        font-size: 18px;
+      }
+      .feature-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        letter-spacing: -0.01em;
+      }
+      .feature-desc {
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      /* ═══════════════════════════════════════════
+       PERFORMANCE TABLE
+    ═══════════════════════════════════════════ */
+      .perf-section {
+        padding: 80px 0;
+      }
+      .perf-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        font-size: 14px;
+      }
+      .perf-table thead {
+        background: var(--surface-2);
+      }
+      .perf-table th {
+        padding: 16px 20px;
+        text-align: left;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+      }
+      .perf-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .perf-table tr:last-child td {
+        border-bottom: none;
+      }
+      .perf-table tr:nth-child(even) td {
+        background: rgba(255, 255, 255, 0.01);
+      }
+      .highlight-row td {
+        color: var(--text) !important;
+        background: rgba(82, 162, 255, 0.04) !important;
+      }
+      .highlight-row td:first-child {
+        color: var(--accent) !important;
+        font-weight: 600;
+      }
+      .badge-win {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(34, 197, 94, 0.1);
+        color: var(--green);
+        font-size: 12px;
+        font-family: var(--font-mono);
+        padding: 2px 8px;
+        border-radius: 100px;
+      }
+      .badge-loss {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: rgba(239, 68, 68, 0.1);
+        color: #f87171;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        padding: 2px 8px;
+        border-radius: 100px;
+      }
+
+      /* ═══════════════════════════════════════════
+       INSTALL
+    ═══════════════════════════════════════════ */
+      .install-section {
+        padding: 80px 0;
+      }
+      .install-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .install-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 32px;
+      }
+      .install-card-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .os-icon {
+        font-size: 20px;
+      }
+      .code-block {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        color: #86efac;
+        margin: 12px 0;
+        overflow-x: auto;
+        line-height: 1.6;
+      }
+      .code-comment {
+        color: var(--muted);
+      }
+      .code-command {
+        color: var(--accent);
+      }
+
+      /* ═══════════════════════════════════════════
+       FAQ
+    ═══════════════════════════════════════════ */
+      .faq-section {
+        padding: 80px 0;
+      }
+      .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        background: var(--border);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+      }
+      details {
+        background: var(--bg);
+        transition: background 0.2s;
+      }
+      details[open] {
+        background: var(--surface);
+      }
+      summary {
+        padding: 22px 28px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        user-select: none;
+      }
+      summary::-webkit-details-marker {
+        display: none;
+      }
+      .faq-arrow {
+        width: 20px;
+        height: 20px;
+        color: var(--muted);
+        transition: transform 0.2s;
+        flex-shrink: 0;
+      }
+      details[open] .faq-arrow {
+        transform: rotate(45deg);
+      }
+      .faq-body {
+        padding: 0 28px 22px;
+        font-size: 14px;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      /* ═══════════════════════════════════════════
+       CTA BANNER
+    ═══════════════════════════════════════════ */
+      .cta-section {
+        padding: 80px 0 100px;
+      }
+      .cta-card {
+        background: var(--surface);
+        border: 1px solid var(--border-accent);
+        border-radius: 24px;
+        padding: 64px 48px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-card::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: 20%;
+        right: 20%;
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--accent),
+          transparent
+        );
+      }
+      .cta-title {
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        margin-bottom: 16px;
+      }
+      .cta-sub {
+        color: var(--muted);
+        font-size: 16px;
+        max-width: 440px;
+        margin: 0 auto 36px;
+      }
+      .cta-platforms {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+      .platform-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border: 1px solid var(--border);
+        border-radius: 100px;
+        font-size: 12px;
+        color: var(--muted);
+        font-family: var(--font-mono);
+      }
+
+      /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 40px 0;
+      }
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .footer-left {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .footer-left a {
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+      }
+      .footer-left a:hover {
+        color: var(--text);
+      }
+      .footer-links {
+        display: flex;
+        gap: 20px;
+        list-style: none;
+      }
+      .footer-links a {
+        font-size: 13px;
+        color: var(--muted);
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--text);
+      }
+      .disclaimer {
+        margin-top: 12px;
+        font-size: 11px;
+        color: rgba(107, 114, 128, 0.6);
+      }
+
+      /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+      @media (max-width: 768px) {
+        .nav-links {
+          display: none;
+        }
+        .hero {
+          padding: 64px 0 60px;
+        }
+        .hero-stats {
+          gap: 20px;
+        }
+        .stat-value {
+          font-size: 20px;
+        }
+        .install-grid {
+          grid-template-columns: 1fr;
+        }
+        .cta-card {
+          padding: 40px 24px;
+        }
+        .footer-inner {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .mock-sidebar {
+          width: 120px;
+        }
+        .mock-sidebar-item {
+          font-size: 10px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <!-- Background Settings Button -->
-    <button
-      id="bgSettingsBtn"
-      class="btn-ghost btn-icon"
-      title="Background settings"
-      aria-label="Background settings"
-    >
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="3" />
-        <path
-          d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"
-        />
-        <path d="m9 9 6 6M9 15l6-6" />
-      </svg>
-      <span>Background</span>
-    </button>
+    <!-- Background effects -->
+    <div class="glow-orb glow-orb-1" aria-hidden="true"></div>
+    <div class="glow-orb glow-orb-2" aria-hidden="true"></div>
 
-    <!-- Background Settings Modal -->
-    <div
-      id="bgModal"
-      class="modal"
-      style="display: none"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Background settings"
-    >
-      <div class="modal-backdrop"></div>
-      <div class="modal-panel">
-        <div class="modal-header">
-          <h3>Background</h3>
-          <button class="close btn-ghost btn-icon-only" aria-label="Close">
+    <!-- ══ NAV ══ -->
+    <nav aria-label="Main navigation">
+      <div class="container">
+        <div class="nav-inner">
+          <a
+            href="/"
+            class="nav-logo"
+            aria-label="Jira Desktop Unofficial home"
+          >
+            <div class="nav-logo-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect x="2" y="2" width="5" height="5" rx="1" fill="#000" />
+                <rect x="9" y="2" width="5" height="5" rx="1" fill="#000" />
+                <rect
+                  x="2"
+                  y="9"
+                  width="5"
+                  height="5"
+                  rx="1"
+                  fill="#000"
+                  opacity=".5"
+                />
+                <rect x="9" y="9" width="5" height="5" rx="1" fill="#000" />
+              </svg>
+            </div>
+            Jira Desktop Unofficial
+          </a>
+          <ul class="nav-links" role="list">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#performance">Performance</a></li>
+            <li><a href="#install">Install</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+          <div class="nav-cta">
+            <a
+              href="https://github.com/cas8398/jira-desktop-unofficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-ghost"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"
+                />
+              </svg>
+              GitHub
+            </a>
+            <a
+              href="https://github.com/cas8398/jira-desktop-unofficial/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary"
+            >
+              Download
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ══ HERO ══ -->
+    <header class="hero" role="banner">
+      <div class="container">
+        <div class="hero-badge">
+          <span class="dot" aria-hidden="true"></span>
+          v0.1.3 — Now available
+        </div>
+        <h1>
+          Jira, without<br />
+          <span class="accent">the browser tax.</span>
+        </h1>
+        <p class="hero-sub">
+          A minimal desktop wrapper for Jira, built with Tauri. Clean window. No
+          tabs. No Electron. Just your work.
+        </p>
+        <div class="hero-actions">
+          <a
+            href="https://github.com/cas8398/jira-desktop-unofficial/releases"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-primary btn-large"
+          >
             <svg
               width="16"
               height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              aria-hidden="true"
+              stroke-width="2.5"
             >
-              <path d="M18 6 6 18M6 6l12 12" />
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7,10 12,15 17,10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
             </svg>
-          </button>
+            Download Free
+          </a>
+          <a
+            href="https://github.com/cas8398/jira-desktop-unofficial"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-ghost btn-large"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"
+              />
+            </svg>
+            View Source
+          </a>
         </div>
-
-        <div class="field-group">
-          <label for="bgSelect">Theme</label>
-          <select id="bgSelect" class="select">
-            <option value="default">Default</option>
-            <option value="abstract">Abstract</option>
-            <option value="city">City Night</option>
-            <option value="pastel">Pastel Sky</option>
-            <option value="nature">Nature Forest</option>
-            <option value="blue">Blue House</option>
-          </select>
-        </div>
-
-        <div class="field-group">
-          <div class="label-row">
-            <label for="overlayOpacity">Overlay</label>
-            <span id="opacityValue" class="badge">50%</span>
+        <div class="hero-stats" role="list" aria-label="Key statistics">
+          <div class="stat" role="listitem">
+            <div class="stat-value">~80MB</div>
+            <div class="stat-label">RAM usage</div>
           </div>
-          <input
-            type="range"
-            id="overlayOpacity"
-            min="0"
-            max="100"
-            value="50"
-            class="range"
-          />
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat" role="listitem">
+            <div class="stat-value">~8MB</div>
+            <div class="stat-label">download size</div>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat" role="listitem">
+            <div class="stat-value">&lt;2s</div>
+            <div class="stat-label">startup time</div>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat" role="listitem">
+            <div class="stat-value">MIT</div>
+            <div class="stat-label">open source</div>
+          </div>
         </div>
-
-        <button id="applyBgBtn" class="btn-primary">Apply</button>
       </div>
-    </div>
+    </header>
 
-    <!-- Main App -->
-    <main class="app-shell">
-      <!-- Add Instance Form -->
-      <section id="url-input-container" style="display: none">
-        <div class="card form-card">
-          <div class="card-header">
-            <h2>Add Instance</h2>
-            <p class="muted">Connect a new Jira workspace</p>
-          </div>
-          <div class="fields">
-            <div class="field-group">
-              <label for="instanceName">Name</label>
-              <input
-                type="text"
-                id="instanceName"
-                placeholder="My Company Jira"
-                autocomplete="off"
-                spellcheck="false"
-              />
+    <!-- ══ SCREENSHOT ══ -->
+    <section class="screenshot-section" aria-label="App preview">
+      <div class="container">
+        <div
+          class="window-frame"
+          role="img"
+          aria-label="Jira Desktop Unofficial application window showing a Jira board"
+        >
+          <div class="window-titlebar">
+            <div class="traffic-light tl-red"></div>
+            <div class="traffic-light tl-yellow"></div>
+            <div class="traffic-light tl-green"></div>
+            <div class="window-url">
+              <div class="window-url-bar">
+                company.atlassian.net — Jira Desktop Unofficial
+              </div>
             </div>
-            <div class="field-group">
-              <label for="instanceUrl">URL</label>
-              <input
-                type="text"
-                id="instanceUrl"
-                placeholder="https://company.atlassian.net"
-                autocomplete="off"
-                spellcheck="false"
-              />
-            </div>
-            <div
-              id="error"
-              class="error-msg"
-              role="alert"
-              aria-live="polite"
-            ></div>
           </div>
-          <div class="form-actions">
-            <button id="cancelBtn" class="btn-ghost">Cancel</button>
-            <button id="saveBtn" class="btn-primary">Save instance</button>
+          <div class="window-content">
+            <div class="mock-jira" aria-hidden="true">
+              <nav class="mock-sidebar">
+                <div class="mock-sidebar-item">🏠 Home</div>
+                <div class="mock-sidebar-item active">📋 Board</div>
+                <div class="mock-sidebar-item">📝 Backlog</div>
+                <div class="mock-sidebar-item">📊 Reports</div>
+                <div class="mock-sidebar-item">⚙️ Settings</div>
+              </nav>
+              <main class="mock-main">
+                <div class="mock-board-header">Sprint 14 — Active</div>
+                <div class="mock-columns">
+                  <div class="mock-col">
+                    <div class="mock-col-header">To Do</div>
+                    <div class="mock-card">
+                      <div class="mock-card-tag tag-blue">FEAT-42</div>
+                      <br />Add dark mode toggle to settings panel
+                    </div>
+                    <div class="mock-card">
+                      <div class="mock-card-tag tag-purple">BUG-18</div>
+                      <br />Fix sidebar collapse on resize
+                    </div>
+                  </div>
+                  <div class="mock-col">
+                    <div class="mock-col-header">In Progress</div>
+                    <div class="mock-card">
+                      <div class="mock-card-tag tag-blue">FEAT-38</div>
+                      <br />Implement keyboard shortcuts
+                    </div>
+                  </div>
+                  <div class="mock-col">
+                    <div class="mock-col-header">Done</div>
+                    <div class="mock-card">
+                      <div class="mock-card-tag tag-green">FEAT-31</div>
+                      <br />URL memory & auto-restore
+                    </div>
+                    <div class="mock-card">
+                      <div class="mock-card-tag tag-green">FEAT-29</div>
+                      <br />Native OS window integration
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Saved Instances -->
-      <section id="saved-urls-container">
-        <div class="card list-card">
-          <div class="card-header">
-            <div>
-              <h2>Instances</h2>
-              <p class="muted">Click any to open</p>
+    <!-- ══ FEATURES ══ -->
+    <section class="features" id="features" aria-labelledby="features-heading">
+      <div class="container">
+        <span class="section-label">Features</span>
+        <h2 class="section-title" id="features-heading">
+          Everything you need.<br />Nothing you don't.
+        </h2>
+        <div class="features-grid" role="list">
+          <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true">🖥️</div>
+            <div class="feature-title">Dedicated Window</div>
+            <p class="feature-desc">
+              Jira lives in its own window, completely separate from your
+              browser tabs. Stay focused on the work, not the noise.
+            </p>
+          </div>
+          <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true">⚡</div>
+            <div class="feature-title">Ultra-Lightweight</div>
+            <p class="feature-desc">
+              Built with Tauri and Rust. Uses your OS's native webview — no
+              bundled Chromium, no RAM bloat. Starts in under 2 seconds.
+            </p>
+          </div>
+          <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true">🔒</div>
+            <div class="feature-title">Privacy-First</div>
+            <p class="feature-desc">
+              Zero tracking. Zero telemetry. Zero data collection. Your Jira
+              activity stays between you and your team.
+            </p>
+          </div>
+          <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true">🌐</div>
+            <div class="feature-title">Universal Jira Support</div>
+            <p class="feature-desc">
+              Works with any Jira instance — Cloud, Server, or Data Center.
+              Enter your URL and you're ready.
+            </p>
+          </div>
+          <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true">🧠</div>
+            <div class="feature-title">Smart Memory</div>
+            <p class="feature-desc">
+              Remembers your Jira URL and window preferences across sessions.
+              Open the app, get straight to work.
+            </p>
+          </div>
+          <div class="feature-card" role="listitem">
+            <div class="feature-icon" aria-hidden="true">🎨</div>
+            <div class="feature-title">Native Feel</div>
+            <p class="feature-desc">
+              Integrates with your OS seamlessly. Respects system themes and
+              behaves like any other native desktop application.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ PERFORMANCE ══ -->
+    <section
+      class="perf-section"
+      id="performance"
+      aria-labelledby="perf-heading"
+    >
+      <div class="container">
+        <span class="section-label">Performance</span>
+        <h2 class="section-title" id="perf-heading">
+          The numbers speak<br />for themselves.
+        </h2>
+        <div style="overflow-x: auto; border-radius: var(--radius-lg)">
+          <table
+            class="perf-table"
+            aria-label="Performance comparison between Jira Desktop Unofficial, Electron apps, and browser tabs"
+          >
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Jira Desktop Unofficial</th>
+                <th>Typical Electron App</th>
+                <th>Browser Tab</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="highlight-row">
+                <td>Memory Usage</td>
+                <td><span class="badge-win">~80 MB</span></td>
+                <td><span class="badge-loss">~350 MB</span></td>
+                <td>~150 MB</td>
+              </tr>
+              <tr>
+                <td>Startup Time</td>
+                <td><span class="badge-win">&lt;2 seconds</span></td>
+                <td><span class="badge-loss">5–8 seconds</span></td>
+                <td>Instant</td>
+              </tr>
+              <tr class="highlight-row">
+                <td>Download Size</td>
+                <td><span class="badge-win">~8 MB</span></td>
+                <td><span class="badge-loss">~120 MB</span></td>
+                <td>N/A</td>
+              </tr>
+              <tr>
+                <td>Background CPU</td>
+                <td><span class="badge-win">Minimal</span></td>
+                <td><span class="badge-loss">Moderate</span></td>
+                <td>High</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ INSTALL ══ -->
+    <section
+      class="install-section"
+      id="install"
+      aria-labelledby="install-heading"
+    >
+      <div class="container">
+        <span class="section-label">Installation</span>
+        <h2 class="section-title" id="install-heading">
+          Up and running<br />in 60 seconds.
+        </h2>
+        <div class="install-grid">
+          <div class="install-card">
+            <div class="install-card-title">
+              <span class="os-icon" aria-hidden="true">🪟</span> Windows
             </div>
-            <button id="addNewBtn" class="btn-primary btn-sm">
+            <p
+              style="font-size: 14px; color: var(--muted); margin-bottom: 12px"
+            >
+              Download the <code>.msi</code> or <code>.exe</code> installer from
+              the releases page.
+            </p>
+            <div class="code-block" aria-label="Windows installation steps">
+              <span class="code-comment"
+                ># 1. Download from GitHub Releases</span
+              ><br />
+              <span class="code-comment"># 2. Run the installer</span><br />
+              <span class="code-command">jira-desktop-unofficial_x64.msi</span>
+            </div>
+          </div>
+          <div class="install-card">
+            <div class="install-card-title">
+              <span class="os-icon" aria-hidden="true">🍎</span> macOS
+            </div>
+            <p
+              style="font-size: 14px; color: var(--muted); margin-bottom: 12px"
+            >
+              Download the <code>.dmg</code> file and drag to Applications.
+            </p>
+            <div class="code-block" aria-label="macOS installation steps">
+              <span class="code-comment"># 1. Download the .dmg</span><br />
+              <span class="code-comment"># 2. Drag to /Applications</span><br />
+              <span class="code-command"
+                >open /Applications/JiraDesktop.app</span
+              >
+            </div>
+          </div>
+          <div class="install-card">
+            <div class="install-card-title">
+              <span class="os-icon" aria-hidden="true">🐧</span> Linux
+            </div>
+            <p
+              style="font-size: 14px; color: var(--muted); margin-bottom: 12px"
+            >
+              Available as <code>.AppImage</code>, <code>.deb</code>, or .rpm
+            </p>
+
+            <div
+              class="code-block"
+              aria-label="Linux snap installation command"
+            >
+              <span class="code-comment"
+                ># 1. Download from GitHub Releases</span
+              ><br />
+              <span class="code-comment"># 2. Run the installer</span><br />
+              <span class="code-command">jira-desktop-unofficial_x64</span>
+            </div>
+          </div>
+          <div class="install-card" style="background: var(--surface-2)">
+            <div class="install-card-title">
+              <span class="os-icon" aria-hidden="true">🔧</span> Build from
+              source
+            </div>
+            <p
+              style="font-size: 14px; color: var(--muted); margin-bottom: 12px"
+            >
+              Requires Rust, Node.js, and Tauri prerequisites.
+            </p>
+            <div class="code-block" aria-label="Build from source commands">
+              <span class="code-command"
+                >git clone https://github.com/cas8398/<br />&nbsp;&nbsp;jira-desktop-unofficial</span
+              ><br />
+              <span class="code-command">cd jira-desktop-unofficial</span><br />
+              <span class="code-command">pnpm install && pnpm tauri build</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FAQ ══ -->
+    <section class="faq-section" id="faq" aria-labelledby="faq-heading">
+      <div class="container">
+        <span class="section-label">FAQ</span>
+        <h2 class="section-title" id="faq-heading">Common questions.</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              Why Tauri instead of Electron?
               <svg
-                width="14"
-                height="14"
+                class="faq-arrow"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
                 aria-hidden="true"
               >
-                <path d="M12 5v14M5 12h14" />
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
-              Add new
-            </button>
-          </div>
-
-          <div id="instancesList" class="instances-list"></div>
+            </summary>
+            <div class="faq-body">
+              Electron bundles an entire Chromium browser engine into every app
+              — often 100MB+ and 300–500MB of RAM just to render a webpage.
+              Tauri uses the OS's built-in webview (WebView2 on Windows, WebKit
+              on macOS/Linux), resulting in ~8MB downloads and ~80MB RAM usage.
+              The backend is written in Rust, which is memory-safe and blazing
+              fast.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Which Jira instances does it support?
+              <svg
+                class="faq-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </summary>
+            <div class="faq-body">
+              Any Jira instance that runs in a browser will work — Jira Cloud
+              (*.atlassian.net), Jira Server (self-hosted), and Jira Data
+              Center. On first launch, simply enter your instance URL and the
+              app will remember it.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Is this an official Atlassian product?
+              <svg
+                class="faq-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </summary>
+            <div class="faq-body">
+              No. This is an unofficial, community-built project and is not
+              affiliated with or endorsed by Atlassian. "Jira" is a trademark of
+              Atlassian Corporation. This tool is simply a desktop wrapper
+              around the official Jira web interface.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Is my Jira login data safe?
+              <svg
+                class="faq-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </summary>
+            <div class="faq-body">
+              Yes. The app is a thin wrapper — your credentials are handled
+              directly by Jira's own login system, exactly as in a browser. The
+              app collects no data, sends no telemetry, and has no backend
+              servers. You can audit the full source code on GitHub.
+            </div>
+          </details>
+          <details>
+            <summary>
+              Can I use multiple Jira accounts?
+              <svg
+                class="faq-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </summary>
+            <div class="faq-body">
+              Multi-account support is on the roadmap. Currently the app
+              remembers one Jira URL. You can always switch by updating the URL
+              in settings.
+            </div>
+          </details>
+          <details>
+            <summary>
+              How do I report a bug or request a feature?
+              <svg
+                class="faq-arrow"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+            </summary>
+            <div class="faq-body">
+              Open an issue on the
+              <a
+                href="https://github.com/cas8398/jira-desktop-unofficial/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="color: var(--accent)"
+                >GitHub Issues page</a
+              >. Include your OS, app version, and a description of the problem.
+              Feature requests are welcome in GitHub Discussions.
+            </div>
+          </details>
         </div>
-      </section>
-    </main>
+      </div>
+    </section>
 
-    <!-- Footer -->
-    <footer id="app-footer">
-      <a href="#" id="github-link"
-        >JDU - Jira Desktop Unofficial <span id="version-app"></span
-      ></a>
-      <span class="sep">·</span>
-      <span>by <a href="#" id="maintainer-link">Cahyanudien AS</a></span>
+    <!-- ══ CTA ══ -->
+    <section class="cta-section" aria-labelledby="cta-heading">
+      <div class="container">
+        <div class="cta-card">
+          <h2 class="cta-title" id="cta-heading">
+            Ready to take back<br />your focus?
+          </h2>
+          <p class="cta-sub">
+            Free, open source, and under 8MB. Download for your platform in
+            seconds.
+          </p>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              gap: 12px;
+              flex-wrap: wrap;
+            "
+          >
+            <a
+              href="https://github.com/cas8398/jira-desktop-unofficial/releases"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-primary btn-large"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                aria-hidden="true"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7,10 12,15 17,10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Download Latest Release
+            </a>
+            <a
+              href="https://medium.com/@cas8398/jira-desktop-unofficial-a-minimal-jira-desktop-wrapper-built-with-tauri-5ab15a3586aa"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-ghost btn-large"
+            >
+              Read the Story
+            </a>
+          </div>
+          <div
+            class="cta-platforms"
+            role="list"
+            aria-label="Supported platforms"
+          >
+            <span class="platform-pill" role="listitem">🪟 Windows</span>
+            <span class="platform-pill" role="listitem">🍎 macOS</span>
+            <span class="platform-pill" role="listitem">🐧 Linux</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOOTER ══ -->
+    <footer role="contentinfo">
+      <div class="container">
+        <div class="footer-inner">
+          <div class="footer-left">
+            <div>
+              Built by
+              <a
+                href="https://github.com/cas8398"
+                target="_blank"
+                rel="noopener noreferrer"
+                >cas8398</a
+              >
+              with ❤️ and
+              <a
+                href="https://tauri.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Tauri</a
+              >. MIT License.
+            </div>
+            <div class="disclaimer">
+              Not affiliated with or endorsed by Atlassian. Jira is a registered
+              trademark of Atlassian Corporation Plc.
+            </div>
+          </div>
+          <ul class="footer-links" role="list">
+            <li>
+              <a
+                href="https://github.com/cas8398/jira-desktop-unofficial"
+                target="_blank"
+                rel="noopener noreferrer"
+                >GitHub</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/cas8398/jira-desktop-unofficial/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Releases</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/cas8398/jira-desktop-unofficial/issues"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Issues</a
+              >
+            </li>
+            <li>
+              <a
+                href="https://github.com/cas8398/jira-desktop-unofficial/blob/master/LICENSE"
+                target="_blank"
+                rel="noopener noreferrer"
+                >License</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
     </footer>
   </body>
 </html>

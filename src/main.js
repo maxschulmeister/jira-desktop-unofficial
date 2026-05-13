@@ -1,5 +1,5 @@
 // main.js
-import { openWebsiteInNewWindow } from "./src/utils/window_utils.js";
+import { openWebsiteInNewWindow } from "./utils/window_utils.js";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { getVersion } from "@tauri-apps/api/app";
 
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function getImageUrl(relativePath) {
     if (import.meta.env.DEV) {
-      return `src/assets/${relativePath}`;
+      return `./assets/${relativePath}`;
     }
 
     return `${relativePath}`;
