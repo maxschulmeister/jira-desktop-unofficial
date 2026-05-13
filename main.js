@@ -38,16 +38,25 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentBg = { preset: "default", opacity: 50 };
 
   const bgPresets = {
-    default: "src/assets/bg.jpg",
-    abstract: "src/assets/pexels-codioful-6985268.jpg",
-    city: "src/assets/pexels-mathew-liang-416678-3013999.jpg",
-    pastel: "src/assets/pexels-darya-grey_owl-132130036-11478290.jpg",
-    nature: "src/assets/pexels-kovalskiolga-13789391.jpg",
-    blue: "src/assets/pexels-giancarlo-rojas-2002126-5660082.jpg",
+    default: "bg.jpg",
+    abstract: "pexels-codioful-6985268.jpg",
+    city: "pexels-mathew-liang-416678-3013999.jpg",
+    pastel: "pexels-darya-grey_owl-132130036-11478290.jpg",
+    nature: "pexels-kovalskiolga-13789391.jpg",
+    blue: "pexels-giancarlo-rojas-2002126-5660082.jpg",
   };
 
+  function getImageUrl(relativePath) {
+    if (import.meta.env.DEV) {
+      return `src/assets/${relativePath}`;
+    }
+
+    return `${relativePath}`;
+  }
+
   function applyBackground(preset, opacity) {
-    const bgUrl = bgPresets[preset] || bgPresets.default;
+    const bgUrl = getImageUrl(bgPresets[preset] || bgPresets.default);
+
     document.body.style.backgroundImage = `url('${bgUrl}')`;
     const alpha = opacity / 100;
     let dynamicStyle = document.getElementById("dynamic-bg-style");

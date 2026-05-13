@@ -45,6 +45,9 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "category": "Development",
+    "shortDescription": "Unofficial Jira desktop client",
+    "longDescription": "Jira Desktop Unofficial is a clean, focused desktop wrapper for Jira. No tabs. No distractions. Just Jira in its own window — fast, secure, and memory-efficient. Built with Tauri for native performance and minimal resource usage."
   }
 }
