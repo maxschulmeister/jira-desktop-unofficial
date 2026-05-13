@@ -4,6 +4,15 @@ A minimal Jira desktop wrapper built with [Tauri](https://tauri.app/) — Reclai
 
 ![Screenshot](screenshot/ss1.png)
 
+## 📝 What's New in v0.1.3
+
+- 🎨 **5 New Backgrounds** — Beautiful Pexels images to personalize your workspace
+- 🔄 **Dynamic Window Titles** — Titles now update based on the Jira page you're viewing
+- ✨ **Modern UI Redesign** — Cleaner, fresher interface
+- 🐛 **Better URL Validation** — Fixed issues with trailing slashes and root paths
+
+> See [CHANGELOG.md](CHANGELOG.md) for complete version history
+
 ## 🖥️ What Is It?
 
 Jira Desktop Unofficial is a clean, focused desktop wrapper for Jira. No tabs. No distractions. Just Jira in its own window — fast, secure, and memory-efficient.
@@ -19,6 +28,7 @@ Think of it as giving Jira its own dedicated workspace on your desktop, similar 
 - 🧠 **Smart memory** — Remembers your Jira URL and window preferences
 - 🎨 **Native feel** — Integrates seamlessly with your operating system
 - 📱 **Multi-platform** — Available for Windows, macOS, and Linux
+- 🖼️ **Custom backgrounds** — Choose from 5 beautiful Pexels images to personalize your app
 
 ## 🚀 Getting Started
 
@@ -38,12 +48,14 @@ Think of it as giving Jira its own dedicated workspace on your desktop, similar 
 When building this project, I chose Tauri over Electron for compelling reasons:
 
 ### The Electron Problem
+
 - **Memory hungry** — Often consumes 300–500MB+ of RAM
 - **Large downloads** — App bundles frequently exceed 100MB
 - **Security concerns** — Full Node.js runtime in the frontend
 - **Performance overhead** — Chromium engine for every app
 
 ### The Tauri Advantage
+
 - **Efficient memory usage** — Typically under 50–100MB
 - **Smaller binaries** — Downloads under 10MB
 - **Better security** — Isolated Rust backend with minimal frontend permissions
@@ -77,7 +89,7 @@ I'm actively working on several enhancements:
 
 - **Notification management** — Desktop notifications for Jira updates
 - **Keyboard shortcuts** — Quick actions without touching the mouse
-- **Theme customization** — Dark mode and custom styling options
+- **More background options** — Additional Pexels images and upload support
 - **Multiple instances** — Support for users with multiple Jira accounts
 - **Offline indicators** — Visual feedback for connection status
 
@@ -98,6 +110,8 @@ This project is open source and community-driven. Whether you're a developer who
 ## 🙏 Acknowledgments
 
 Built with love using the amazing [Tauri framework](https://tauri.app/). Special thanks to the Tauri team for creating such an elegant solution for cross-platform desktop apps, and to the Jira community for the inspiration and feedback.
+
+Background images provided by [Pexels](https://www.pexels.com/), a great resource for free stock photos.
 
 ---
 

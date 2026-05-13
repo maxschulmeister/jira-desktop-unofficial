@@ -1,4 +1,13 @@
-RUN :
+
+RUN PNPM :
+
+pnpm dev
+pnpm build
+
+
+----
+
+RUN TAURI :
 
 pnpm tauri dev
 pnpm tauri build

@@ -1,40 +1,184 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="assets//tauri.svg" />
+    <link rel="icon" href="assets/tauri.svg" />
     <title>Jira Desktop Unofficial</title>
+    <link rel="stylesheet" href="styles.css" />
     <script type="module" src="/main.js" defer></script>
   </head>
   <body>
-    <div id="url-input-container">
-      <h1>Add Jira Instance</h1>
-      <input type="text" id="instanceName" placeholder="Instance Name" />
-      <input
-        type="text"
-        id="instanceUrl"
-        placeholder="https://company.atlassian.net"
-      />
-      <button id="saveBtn">Save</button>
-      <button id="cancelBtn">Cancel</button>
-      <div id="error" style="color: red; margin-top: 10px"></div>
+    <!-- Background Settings Button -->
+    <button
+      id="bgSettingsBtn"
+      class="btn-ghost btn-icon"
+      title="Background settings"
+      aria-label="Background settings"
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="3" />
+        <path
+          d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"
+        />
+        <path d="m9 9 6 6M9 15l6-6" />
+      </svg>
+      <span>Background</span>
+    </button>
+
+    <!-- Background Settings Modal -->
+    <div
+      id="bgModal"
+      class="modal"
+      style="display: none"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Background settings"
+    >
+      <div class="modal-backdrop"></div>
+      <div class="modal-panel">
+        <div class="modal-header">
+          <h3>Background</h3>
+          <button class="close btn-ghost btn-icon-only" aria-label="Close">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="field-group">
+          <label for="bgSelect">Theme</label>
+          <select id="bgSelect" class="select">
+            <option value="default">Default</option>
+            <option value="abstract">Abstract</option>
+            <option value="city">City Night</option>
+            <option value="pastel">Pastel Sky</option>
+            <option value="nature">Nature Forest</option>
+            <option value="blue">Blue House</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <div class="label-row">
+            <label for="overlayOpacity">Overlay</label>
+            <span id="opacityValue" class="badge">50%</span>
+          </div>
+          <input
+            type="range"
+            id="overlayOpacity"
+            min="0"
+            max="100"
+            value="50"
+            class="range"
+          />
+        </div>
+
+        <button id="applyBgBtn" class="btn-primary">Apply</button>
+      </div>
     </div>
 
-    <div id="saved-urls-container">
-      <h2>Saved Instances</h2>
-      <ul id="instancesList"></ul>
-      <button id="addNewBtn">Add New</button>
-    </div>
-  </body>
-  <footer id="app-footer">
-    <p>
+    <!-- Main App -->
+    <main class="app-shell">
+      <!-- Add Instance Form -->
+      <section id="url-input-container" style="display: none">
+        <div class="card form-card">
+          <div class="card-header">
+            <h2>Add Instance</h2>
+            <p class="muted">Connect a new Jira workspace</p>
+          </div>
+          <div class="fields">
+            <div class="field-group">
+              <label for="instanceName">Name</label>
+              <input
+                type="text"
+                id="instanceName"
+                placeholder="My Company Jira"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+            <div class="field-group">
+              <label for="instanceUrl">URL</label>
+              <input
+                type="text"
+                id="instanceUrl"
+                placeholder="https://company.atlassian.net"
+                autocomplete="off"
+                spellcheck="false"
+              />
+            </div>
+            <div
+              id="error"
+              class="error-msg"
+              role="alert"
+              aria-live="polite"
+            ></div>
+          </div>
+          <div class="form-actions">
+            <button id="cancelBtn" class="btn-ghost">Cancel</button>
+            <button id="saveBtn" class="btn-primary">Save instance</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Saved Instances -->
+      <section id="saved-urls-container">
+        <div class="card list-card">
+          <div class="card-header">
+            <div>
+              <h2>Instances</h2>
+              <p class="muted">Click any to open</p>
+            </div>
+            <button id="addNewBtn" class="btn-primary btn-sm">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Add new
+            </button>
+          </div>
+
+          <div id="instancesList" class="instances-list"></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="app-footer">
       <a href="#" id="github-link"
-        >Jira Desktop Unofficial <span id="version-app"></span
+        >JDU - Jira Desktop Unofficial <span id="version-app"></span
       ></a>
-      — built with ❤️ by
-      <a href="#" id="maintainer-link">Cahyanudien AS</a>
-    </p>
-  </footer>
+      <span class="sep">·</span>
+      <span>by <a href="#" id="maintainer-link">Cahyanudien AS</a></span>
+    </footer>
+  </body>
 </html>
