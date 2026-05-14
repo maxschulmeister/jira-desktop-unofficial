@@ -1,7 +1,10 @@
 app-id: com.flagodna.JiraDesktopUnofficial
+
 runtime: org.freedesktop.Platform
-runtime-version: '24.08'
+runtime-version: "24.08"
+
 sdk: org.freedesktop.Sdk
+
 command: jira-desktop-unofficial
 
 finish-args:
@@ -12,11 +15,12 @@ finish-args:
 
 modules:
   - name: jira-desktop-unofficial
+
     buildsystem: simple
+
     build-commands:
-      - mkdir -p /app/bin
       - install -Dm755 jira-desktop-unofficial /app/bin/jira-desktop-unofficial
 
     sources:
       - type: file
-        path: ./dist/jira-desktop-unofficial
+        path: dist/jira-desktop-unofficial
