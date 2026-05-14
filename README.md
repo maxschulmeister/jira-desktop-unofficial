@@ -16,7 +16,7 @@ No tabs. No Electron. No bloat. Just your work.
 
 ## [![SourceForge](https://img.shields.io/sourceforge/dt/jira-desktop-unofficial?style=flat-square&logo=sourceforge&label=SourceForge%20Downloads&color=orange)](https://sourceforge.net/projects/jira-desktop-unofficial/) [![GitHub Downloads](https://img.shields.io/github/downloads/cas8398/jira-desktop-unofficial/total?style=flat-square&logo=github&label=Downloads)](https://github.com/cas8398/jira-desktop-unofficial/releases)
 
-\*\*[🌐 Website](https://cas8398.github.io/jira-desktop-unofficial/) · [📦 Download](https://github.com/cas8398/jira-desktop-unofficial/releases) · [🐛 Report Bug](https://github.com/cas8398/jira-desktop-unofficial/issues) · [💡 Request Feature](https://github.com/cas8398/jira-desktop-unofficial/discussions)
+[🌐 Website](https://cas8398.github.io/jira-desktop-unofficial/) · [📦 Download](https://github.com/cas8398/jira-desktop-unofficial/releases) · [🐛 Report Bug](https://github.com/cas8398/jira-desktop-unofficial/issues) · [💡 Request Feature](https://github.com/cas8398/jira-desktop-unofficial/discussions)
 
 </div>
 
