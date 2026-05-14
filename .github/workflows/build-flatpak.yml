@@ -37,10 +37,9 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install Linux dependencies
+      - name: Install dependencies (system)
         run: |
           sudo apt update
-
           sudo apt install -y \
             flatpak \
             flatpak-builder \
@@ -55,31 +54,34 @@ jobs:
           flatpak --user remote-add --if-not-exists flathub \
             https://flathub.org/repo/flathub.flatpakrepo
 
-          flatpak --user install -y flathub \
-            org.freedesktop.Platform//24.08 \
-            org.freedesktop.Sdk//24.08
+          flatpak --user update -y
 
-      - name: Install dependencies
+          flatpak --user install -y flathub \
+            org.gnome.Platform//47 \
+            org.gnome.Sdk//47
+
+      - name: Install JS deps
         run: pnpm install --frozen-lockfile
 
       - name: Build Tauri app
         run: pnpm tauri build
 
-      - name: Debug build output
+      - name: Debug release output
         run: |
-          echo "=== RELEASE FILES ==="
+          echo "=== RELEASE DIR ==="
           ls -lah src-tauri/target/release
 
-      - name: Prepare Flatpak files
+      - name: Prepare Flatpak input binary
         run: |
           mkdir -p flatpak/dist
 
-          BINARY=$(find src-tauri/target/release -maxdepth 1 -type f -executable ! -name "*.so" ! -name "*.d" | head -n 1)
+          BINARY=$(find src-tauri/target/release -maxdepth 1 -type f -executable \
+            ! -name "*.so" ! -name "*.d" \
+            ! -name "build" ! -name "deps" | head -n 1)
 
-          echo "Using binary: $BINARY"
+          echo "Selected binary: $BINARY"
 
           cp "$BINARY" flatpak/dist/jira-desktop-unofficial
-
           chmod +x flatpak/dist/jira-desktop-unofficial
 
       - name: Build Flatpak
@@ -90,11 +92,10 @@ jobs:
             build-dir \
             flatpak/com.flagodna.JiraDesktopUnofficial.yml
 
-      - name: Export Flatpak repository
+      - name: Export Flatpak repo
         run: |
-          flatpak build-export \
-            repo \
-            build-dir
+          rm -rf repo
+          flatpak build-export repo build-dir
 
       - name: Create Flatpak bundle
         run: |
@@ -103,13 +104,13 @@ jobs:
             jira-desktop-unofficial.flatpak \
             com.flagodna.JiraDesktopUnofficial
 
-      - name: Upload Flatpak artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: jira-desktop-unofficial-flatpak
+          name: flatpak
           path: jira-desktop-unofficial.flatpak
 
-      - name: Upload Release Asset
+      - name: Upload Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
