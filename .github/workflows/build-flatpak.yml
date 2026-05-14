@@ -57,8 +57,8 @@ jobs:
           flatpak --user update -y
 
           flatpak --user install -y flathub \
-            org.freedesktop.Platform//24.08 \
-            org.freedesktop.Sdk//24.08
+            org.gnome.Platform//47 \
+            org.gnome.Sdk//47
 
       - name: Install JS deps
         run: pnpm install --frozen-lockfile
