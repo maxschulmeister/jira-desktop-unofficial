@@ -1,8 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Jira Desktop Unofficial
-Comment=Unofficial Jira desktop app built with Tauri
+Name=Jira Desktop
+Comment=Jira desktop app built with Tauri
 Exec=jira-unofficial-desktop
 Icon=${SNAP}/share/icons/hicolor/128x128/apps/jira-unofficial-desktop.png
 Terminal=false

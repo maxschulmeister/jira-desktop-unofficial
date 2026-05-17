@@ -72,7 +72,7 @@ fn update_window_title(window: tauri::Window, title: String) {
     
     println!("📝 Updating title for window '{}' to: {}", window_label, title);
     if !title.is_empty() && title != "null" && title != "undefined" {
-        let _ = window.set_title(&format!("{} [JDU]", title));
+        let _ = window.set_title(&format!("{} - Jira Desktop", title));
     }
 }
 
@@ -248,7 +248,7 @@ fn main() {
         ])
         .setup(|app| {
             if let Some(main_window) = app.get_webview_window("main") {
-                main_window.set_title("JDU - Jira Desktop Unofficial")?;
+                main_window.set_title("Jira Desktop")?;
             }
             Ok(())
         })

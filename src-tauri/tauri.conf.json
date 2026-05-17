@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "JDU - Jira Desktop Unofficial",
+  "productName": "Jira Desktop",
   "version": "0.1.3",
-  "identifier": "com.jira-unofficial-desktop.app",
+  "identifier": "com.jira-desktop.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
@@ -18,7 +18,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "JDU - Jira Desktop Unofficial",
+        "title": "Jira Desktop",
         "url": "index.html",
         "minWidth": 800,
         "minHeight": 600,
@@ -41,7 +41,7 @@
       "icons/icon.ico"
     ],
     "category": "Development",
-    "shortDescription": "Unofficial Jira desktop client",
-    "longDescription": "Jira Desktop Unofficial (JDU) is a clean, focused desktop wrapper for Jira. No tabs. No distractions. Just Jira in its own window — fast, secure, and memory-efficient. Built with Tauri for native performance and minimal resource usage."
+    "shortDescription": "Jira desktop client",
+    "longDescription": "Jira Desktop is a clean, focused desktop wrapper for Jira. No tabs. No distractions. Just Jira in its own window — fast, secure, and memory-efficient. Built with Tauri for native performance and minimal resource usage."
   }
 }

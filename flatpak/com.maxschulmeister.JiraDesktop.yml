@@ -1,8 +1,8 @@
-app-id: com.flagodna.JiraDesktopUnofficial
+app-id: com.maxschulmeister.JiraDesktop
 runtime: org.gnome.Platform
 runtime-version: "47"
 sdk: org.gnome.Sdk
-command: jira-desktop-unofficial
+command: jira-desktop
 finish-args:
   - --share=network
   - --socket=x11
@@ -10,10 +10,10 @@ finish-args:
   - --device=dri
   - --share=ipc
 modules:
-  - name: jira-desktop-unofficial
+  - name: jira-desktop
     buildsystem: simple
     build-commands:
-      - install -Dm755 jira-desktop-unofficial /app/bin/jira-desktop-unofficial
+      - install -Dm755 jira-desktop /app/bin/jira-desktop
     sources:
       - type: file
-        path: dist/jira-desktop-unofficial
+        path: dist/jira-desktop

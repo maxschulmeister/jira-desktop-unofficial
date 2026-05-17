@@ -1,0 +1,54 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    # Run daily at 6:00 UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/cas8398/jira-desktop-unofficial.git
+          git fetch upstream
+
+      - name: Sync and re-apply customizations
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Try to merge upstream changes
+          MERGE_RESULT=0
+          git merge upstream/master --no-edit || MERGE_RESULT=$?
+
+          if [ $MERGE_RESULT -ne 0 ]; then
+            echo "::warning::Merge conflicts detected. Attempting automatic resolution..."
+
+            # List conflicted files
+            CONFLICTS=$(git diff --name-only --diff-filter=U)
+            echo "Conflicted files: $CONFLICTS"
+
+            # For our customized files, always keep our version
+            for file in $CONFLICTS; do
+              echo "Keeping our version of: $file"
+              git checkout --ours "$file"
+              git add "$file"
+            done
+
+            git commit --no-edit
+          fi
+
+      - name: Push changes
+        run: git push origin master

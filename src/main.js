@@ -339,8 +339,8 @@ document.addEventListener("DOMContentLoaded", () => {
   [githubLink, maintainerLink].forEach((link, i) => {
     if (!link) return;
     const urls = [
-      "https://github.com/cas8398/jira-desktop-unofficial",
-      "https://github.com/cas8398",
+      "https://github.com/maxschulmeister/jira-desktop-unofficial",
+      "https://github.com/maxschulmeister",
     ];
     link.addEventListener("click", (e) => {
       e.preventDefault();
