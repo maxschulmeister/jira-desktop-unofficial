@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      changed: ${{ steps.check.outputs.changed }}
 
     steps:
       - name: Checkout fork
@@ -24,7 +26,23 @@ jobs:
           git remote add upstream https://github.com/cas8398/jira-desktop-unofficial.git
           git fetch upstream
 
+      - name: Check for new changes
+        id: check
+        run: |
+          LOCAL=$(git rev-parse HEAD)
+          UPSTREAM=$(git rev-parse upstream/master)
+          echo "local=$LOCAL" >> $GITHUB_OUTPUT
+          echo "upstream=$UPSTREAM" >> $GITHUB_OUTPUT
+          if [ "$LOCAL" = "$UPSTREAM" ]; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No upstream changes detected."
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "Upstream has new commits: $LOCAL -> $UPSTREAM"
+          fi
+
       - name: Sync and re-apply customizations
+        if: steps.check.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -51,4 +69,20 @@ jobs:
           fi
 
       - name: Push changes
+        if: steps.check.outputs.changed == 'true'
         run: git push origin master
+
+  rebuild:
+    needs: sync
+    runs-on: ubuntu-latest
+    if: needs.sync.outputs.changed == 'true'
+    permissions:
+      actions: write
+    steps:
+      - name: Trigger macOS build
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: build-mac.yml
+          ref: master
+          inputs: |
+            { "version": "auto-sync-${{ github.run_number }}" }
