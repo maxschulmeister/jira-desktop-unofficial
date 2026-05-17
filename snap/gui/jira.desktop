@@ -1,10 +1,10 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=Jira Desktop
+Name=Jira
 Comment=Jira desktop app built with Tauri
-Exec=jira-desktop
-Icon=jira-desktop
+Exec=jira
+Icon=jira
 Terminal=false
 Categories=Network;Development;ProjectManagement;
 Keywords=Jira;Project;Task;Issue;Atlassian;
