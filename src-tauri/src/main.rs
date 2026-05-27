@@ -304,10 +304,10 @@ fn main() {
             .unwrap_or("Unknown panic");
 
         let lower = msg.to_lowercase();
-        let is_webview2 = lower.contains("webview") || lower.contains("edge")
+        let _is_webview2 = lower.contains("webview") || lower.contains("edge")
             || lower.contains("class not registered") || lower.contains("runtime");
 
-        if is_webview2 {
+        if _is_webview2 {
             show_error_dialog(
                 "JDU — Missing Runtime",
                 "Microsoft WebView2 Runtime is not installed or is corrupted.\n\n\
@@ -392,12 +392,12 @@ fn main() {
         eprintln!("[JDU] fatal: {}", msg);
 
         let lower = msg.to_lowercase();
-        let is_webview2 = lower.contains("webview") || lower.contains("edge")
+        let _is_webview2 = lower.contains("webview") || lower.contains("edge")
             || lower.contains("0x80070002") || lower.contains("class not registered")
             || lower.contains("runtime");
 
         #[cfg(target_os = "windows")]
-        if is_webview2 {
+        if _is_webview2 {
             show_error_dialog(
                 "JDU — Missing Runtime",
                 "Microsoft WebView2 Runtime is not installed or is corrupted.\n\n\

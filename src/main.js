@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     blue: "pexels-giancarlo-rojas-2002126-5660082.jpg",
   };
 
-  function getImageUrl(relativePath) { 
+  function getImageUrl(relativePath) {
     return `${relativePath}`;
   }
 
