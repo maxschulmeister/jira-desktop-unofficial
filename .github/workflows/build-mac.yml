@@ -14,24 +14,35 @@ on:
 jobs:
   build-macos:
     runs-on: macos-latest
+    permissions:
+      contents: write   # Required for creating releases
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-          cache: 'npm'
-      
+          node-version: 20
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
-      
+          targets: aarch64-apple-darwin, x86_64-apple-darwin
+
       - name: Install dependencies
-        run: npm ci
-      
+        run: pnpm install --frozen-lockfile
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
@@ -42,3 +53,5 @@ jobs:
           releaseBody: 'See CHANGELOG.md for details.'
           releaseDraft: true
           args: --target universal-apple-darwin
+          # Optional: help the action find artifacts
+          includeRelease: true

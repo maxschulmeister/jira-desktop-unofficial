@@ -1,8 +1,26 @@
-# Jira Desktop Unofficial
+<div align="center">
 
-A minimal Jira desktop wrapper built with [Tauri](https://tauri.app/) — Reclaim your focus with a distraction-free Jira experience.
+<img src="screenshot/ss1.png" alt="Jira Desktop Unofficial Screenshot" width="100%" />
 
-![Screenshot](screenshot/ss1.png)
+# Jira Desktop Unofficial (JDU)
+
+**A minimal, distraction-free Jira desktop wrapper built with [Tauri](https://tauri.app/) + Rust.**  
+No tabs. No Electron. No bloat. Just your work.
+
+[![GitHub Release](https://img.shields.io/github/v/release/cas8398/jira-desktop-unofficial?style=flat-square&logo=github&label=Latest%20Release&color=0052CC)](https://github.com/cas8398/jira-desktop-unofficial/releases)
+[![GitHub Stars](https://img.shields.io/github/stars/cas8398/jira-desktop-unofficial?style=flat-square&logo=github&color=gold)](https://github.com/cas8398/jira-desktop-unofficial/stargazers)
+[![GitHub Issues](https://img.shields.io/github/issues/cas8398/jira-desktop-unofficial?style=flat-square&logo=github)](https://github.com/cas8398/jira-desktop-unofficial/issues)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](https://github.com/cas8398/jira-desktop-unofficial/blob/master/LICENSE)
+[![Built with Tauri](https://img.shields.io/badge/Built%20with-Tauri-blue?style=flat-square&logo=tauri)](https://tauri.app/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey?style=flat-square&logo=windows)](https://github.com/cas8398/jira-desktop-unofficial/releases)
+
+## [![SourceForge](https://img.shields.io/sourceforge/dt/jira-desktop-unofficial?style=flat-square&logo=sourceforge&label=SourceForge%20Downloads&color=orange)](https://sourceforge.net/projects/jira-desktop-unofficial/) [![GitHub Downloads](https://img.shields.io/github/downloads/cas8398/jira-desktop-unofficial/total?style=flat-square&logo=github&label=Downloads)](https://github.com/cas8398/jira-desktop-unofficial/releases)
+
+[🌐 Website](https://cas8398.github.io/jira-desktop-unofficial/) · [📦 Download](https://github.com/cas8398/jira-desktop-unofficial/releases) · [🐛 Report Bug](https://github.com/cas8398/jira-desktop-unofficial/issues) · [💡 Request Feature](https://github.com/cas8398/jira-desktop-unofficial/discussions)
+
+</div>
+
+---
 
 ## 📝 What's New in v0.1.3
 
@@ -11,108 +29,156 @@ A minimal Jira desktop wrapper built with [Tauri](https://tauri.app/) — Reclai
 - ✨ **Modern UI Redesign** — Cleaner, fresher interface
 - 🐛 **Better URL Validation** — Fixed issues with trailing slashes and root paths
 
-> See [CHANGELOG.md](CHANGELOG.md) for complete version history
+> See [CHANGELOG.md](CHANGELOG.md) for the full version history.
+
+---
 
 ## 🖥️ What Is It?
 
-Jira Desktop Unofficial is a clean, focused desktop wrapper for Jira. No tabs. No distractions. Just Jira in its own window — fast, secure, and memory-efficient.
+Jira Desktop Unofficial is a clean, focused desktop wrapper for Jira. It gives Jira its own dedicated window on your desktop — similar to how Slack, Discord, or VS Code operate as standalone apps — but without the resource overhead of Electron.
 
-Think of it as giving Jira its own dedicated workspace on your desktop, similar to how Slack, Discord, or VS Code operate as standalone applications, but without the resource overhead of traditional Electron apps.
+Fast. Secure. Memory-efficient. Open source.
+
+---
 
 ## ✨ Features
 
-- 🖥️ **Dedicated Window** — Opens your Jira instance in a clean, focused desktop window
-- ⚡ **Ultra-lightweight** — Fast startup and low resource usage (thanks to Tauri + Rust)
-- 🔒 **Privacy-focused** — No tracking, no telemetry, no data collection
-- 🌐 **Universal compatibility** — Works with Jira Cloud, Server, and Data Center instances
-- 🧠 **Smart memory** — Remembers your Jira URL and window preferences
-- 🎨 **Native feel** — Integrates seamlessly with your operating system
-- 📱 **Multi-platform** — Available for Windows, macOS, and Linux
-- 🖼️ **Custom backgrounds** — Choose from 5 beautiful Pexels images to personalize your app
+| Feature                        | Description                                                   |
+| ------------------------------ | ------------------------------------------------------------- |
+| 🖥️ **Dedicated Window**        | Jira in its own window, completely separate from your browser |
+| ⚡ **Ultra-lightweight**       | ~80 MB RAM, ~8 MB download, starts in under 2 seconds         |
+| 🔒 **Privacy-focused**         | Zero tracking, zero telemetry, zero data collection           |
+| 🌐 **Universal compatibility** | Works with Jira Cloud, Server, and Data Center                |
+| 🧠 **Smart memory**            | Remembers your Jira URL and window preferences                |
+| 🎨 **Custom backgrounds**      | Choose from 5 beautiful Pexels images                         |
+| 🔄 **Dynamic titles**          | Window title updates based on the Jira page you're on         |
+| 📱 **Multi-platform**          | Windows, macOS, and Linux                                     |
+| 🏠 **Native feel**             | Integrates with your OS seamlessly                            |
+
+---
 
 ## 🚀 Getting Started
 
-1. **Download** the latest release from the [GitHub releases page](https://github.com/cas8398/jira-desktop-unofficial/releases)
-2. **Install** the app for your operating system
-3. **Launch** and enter your Jira instance URL (e.g., `https://company.atlassian.net`)
-4. **Focus** — Enjoy your distraction-free Jira experience! 🎯
+1. **[Download](https://github.com/cas8398/jira-desktop-unofficial/releases)** the latest release for your OS
+2. **Install** the app
+3. **Launch** and enter your Jira URL (e.g. `https://company.atlassian.net`)
+4. **Focus** — enjoy a distraction-free Jira experience 🎯
 
 ### Supported Jira Instances
 
-- Jira Cloud (`*.atlassian.net`)
-- Jira Server (self-hosted)
-- Jira Data Center
+- ☁️ Jira Cloud (`*.atlassian.net`)
+- 🖥️ Jira Server (self-hosted)
+- 🏢 Jira Data Center
 
-## 🧩 Why Not Electron?
+### Platform-Specific Notes
 
-When building this project, I chose Tauri over Electron for compelling reasons:
+> ⚠️ **Windows users:** This app uses Microsoft Edge **WebView2** for rendering. Please ensure it is installed on your system. Most modern Windows machines already have it.
 
-### The Electron Problem
+---
 
-- **Memory hungry** — Often consumes 300–500MB+ of RAM
-- **Large downloads** — App bundles frequently exceed 100MB
-- **Security concerns** — Full Node.js runtime in the frontend
-- **Performance overhead** — Chromium engine for every app
+## 📦 Download
 
-### The Tauri Advantage
+<div align="center">
 
-- **Efficient memory usage** — Typically under 50–100MB
-- **Smaller binaries** — Downloads under 10MB
-- **Better security** — Isolated Rust backend with minimal frontend permissions
-- **Native performance** — Uses your system's webview instead of bundling Chromium
-- **Modern architecture** — Built for the future of desktop apps
+| Platform   | Installer                                                                                               |
+| ---------- | ------------------------------------------------------------------------------------------------------- |
+| 🪟 Windows | `.msi` / `.exe` — [Download](https://github.com/cas8398/jira-desktop-unofficial/releases)               |
+| 🍎 macOS   | `.dmg` — [Download](https://github.com/cas8398/jira-desktop-unofficial/releases)                        |
+| 🐧 Linux   | `.AppImage` / `.deb` / `.rpm` — [Download](https://github.com/cas8398/jira-desktop-unofficial/releases) |
+
+Also available on **SourceForge**:
+
+[![Download Jira Desktop Unofficial](https://a.fsdn.com/con/app/sf-download-button)](https://sourceforge.net/projects/jira-desktop-unofficial/files/latest/download)
+
+</div>
+
+---
 
 ## 📈 Performance Comparison
 
 | Metric         | Jira Desktop Unofficial | Typical Electron App | Browser Tab            |
 | -------------- | ----------------------- | -------------------- | ---------------------- |
-| Memory Usage   | ~80MB                   | ~350MB               | ~150MB                 |
-| Startup Time   | <2 seconds              | 5-8 seconds          | Instant                |
-| Download Size  | ~8MB                    | ~120MB               | N/A                    |
-| Background CPU | Minimal                 | Moderate             | High (with other tabs) |
-
-## 🎯 Who Is This For?
-
-If you're a developer, project manager, or anyone who:
-
-- Spends significant time in Jira daily
-- Values focus and minimalism in their tools
-- Wants to reduce browser tab chaos
-- Appreciates lightweight, efficient software
-- Prefers open-source solutions
-
-…then Jira Desktop Unofficial might be exactly what you need.
-
-## 🔮 What's Next?
-
-I'm actively working on several enhancements:
-
-- **Notification management** — Desktop notifications for Jira updates
-- **Keyboard shortcuts** — Quick actions without touching the mouse
-- **More background options** — Additional Pexels images and upload support
-- **Multiple instances** — Support for users with multiple Jira accounts
-- **Offline indicators** — Visual feedback for connection status
-
-## 🤝 Community & Feedback
-
-This project is open source and community-driven. Whether you're a developer who wants to contribute code, a designer with UI/UX suggestions, or a user with feature requests — I'd love to hear from you!
-
-- **Found a bug?** Please [open an issue](https://github.com/cas8398/jira-desktop-unofficial/issues) with details about your setup and what happened
-- **Have an idea?** Start a discussion in the [GitHub Discussions](https://github.com/cas8398/jira-desktop-unofficial/discussions) section
-- **Want to contribute?** Check out the contributing guidelines and open a pull request
-
-## 📦 Download
-
-➡️ **[Download the latest release](https://github.com/cas8398/jira-desktop-unofficial/releases)** for Windows, macOS, or Linux
-
-⭐ **Star the project** if you find it useful
-
-## 🙏 Acknowledgments
-
-Built with love using the amazing [Tauri framework](https://tauri.app/). Special thanks to the Tauri team for creating such an elegant solution for cross-platform desktop apps, and to the Jira community for the inspiration and feedback.
-
-Background images provided by [Pexels](https://www.pexels.com/), a great resource for free stock photos.
+| Memory Usage   | **~80 MB**              | ~350 MB              | ~150 MB                |
+| Startup Time   | **< 2 seconds**         | 5–8 seconds          | Instant                |
+| Download Size  | **~8 MB**               | ~120 MB              | N/A                    |
+| Background CPU | **Minimal**             | Moderate             | High (with other tabs) |
 
 ---
 
-**Questions or feedback?** Feel free to reach out through GitHub issues or discussions!
+## 🧩 Why Tauri, Not Electron?
+
+### The Electron Problem
+
+- **Memory hungry** — Often 300–500 MB+ of RAM
+- **Large bundles** — Downloads frequently exceed 100 MB
+- **Security concerns** — Full Node.js runtime exposed to the frontend
+- **Bloated** — Ships a full copy of Chromium with every app
+
+### The Tauri Advantage
+
+- ✅ **Efficient** — Typically under 80–100 MB RAM
+- ✅ **Tiny** — Downloads under 10 MB
+- ✅ **Secure** — Isolated Rust backend with minimal frontend permissions
+- ✅ **Native** — Uses your OS's built-in webview (no bundled browser engine)
+- ✅ **Modern** — Built for the future of desktop apps
+
+---
+
+## 🛠️ Build from Source
+
+Requires [Rust](https://www.rust-lang.org/tools/install), [Node.js](https://nodejs.org/), [pnpm](https://pnpm.io/), and [Tauri prerequisites](https://tauri.app/start/prerequisites/) for your platform.
+
+```bash
+git clone https://github.com/cas8398/jira-desktop-unofficial
+cd jira-desktop-unofficial
+pnpm install
+pnpm tauri build
+```
+
+For development:
+
+```bash
+pnpm tauri dev
+```
+
+---
+
+## 🎯 Who Is This For?
+
+If you're someone who:
+
+- Spends significant time in Jira daily
+- Values focus and minimalism in their tools
+- Wants to reclaim browser tab real estate
+- Appreciates lightweight, efficient software
+- Prefers open-source solutions
+
+…then Jira Desktop Unofficial is for you.
+
+---
+
+## 🤝 Contributing & Community
+
+This project is open source and community-driven!
+
+- 🐛 **Found a bug?** [Open an issue](https://github.com/cas8398/jira-desktop-unofficial/issues) with your OS, app version, and what happened.
+- 💡 **Have an idea?** Start a [Discussion](https://github.com/cas8398/jira-desktop-unofficial/discussions).
+- 🛠️ **Want to contribute?** Fork the repo and open a Pull Request — all contributions welcome.
+
+---
+
+## 🙏 Acknowledgments
+
+Built with ❤️ using the amazing [Tauri framework](https://tauri.app/). Special thanks to the Tauri team for creating such an elegant solution for cross-platform desktop apps.
+
+Background images provided by [Pexels](https://www.pexels.com/).
+
+---
+
+<div align="center">
+
+**Not affiliated with or endorsed by Atlassian. Jira is a registered trademark of Atlassian Corporation Plc.**
+
+⭐ **If you find this useful, please [star the repo](https://github.com/cas8398/jira-desktop-unofficial)!** It helps others discover the project.
+
+</div>
