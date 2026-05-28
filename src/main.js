@@ -47,10 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   function getImageUrl(relativePath) {
-    if (import.meta.env.DEV) {
-      return `./assets/${relativePath}`;
-    }
-
     return `${relativePath}`;
   }
 

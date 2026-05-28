@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4] - 2026-05-27
+
+### ✨ New Features
+
+- **WebView2 Runtime Check**  
+  JDU now detects missing or broken WebView2 on startup and shows a clear native error dialog instead of silently closing. No more mysterious disappearing windows.
+
+### 🛠️ Improvements
+
+- **Better Startup Error Handling**  
+  Three-layer safety net: pre-flight check → panic hook → `.run()` error handler. Any startup failure now surfaces a native dialog with a clear message and actionable steps.
+
+- **Accurate WebView2 Detection**  
+  Uses `wry::webview_version()` (Microsoft's official `GetAvailableCoreWebView2BrowserVersionString` API) instead of registry inspection — no false positives, no PowerShell subprocesses.
+
+### 🐛 Bug Fixes
+
+- Fixed HTML5 drag & drop on Jira Board view on Windows. WebView2 intercepts drag events before they reach the DOM by default — patched with `disable_drag_drop_handler()` and a JS event re-wiring layer. ([#4](https://github.com/cas8398/jira-desktop-unofficial/issues/4))
+- Fixed silent crash on Windows when WebView2 Runtime is not installed. ([#4](https://github.com/cas8398/jira-desktop-unofficial/issues/4))
+
+---
+
 ## [0.1.3] - 2026-06-13
 
 ### ✨ New Features
