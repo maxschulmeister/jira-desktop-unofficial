@@ -46,11 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     blue: "pexels-giancarlo-rojas-2002126-5660082.jpg",
   };
 
-  function getImageUrl(relativePath) {
-    if (import.meta.env.DEV) {
-      return `src/assets/${relativePath}`;
-    }
-
+  function getImageUrl(relativePath) { 
     return `${relativePath}`;
   }
 
