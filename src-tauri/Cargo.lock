@@ -1783,7 +1783,7 @@ dependencies = [
 name = "jira"
 version = "0.1.0"
 dependencies = [
- "once_cell",
+ "objc2-app-kit",
  "serde",
  "serde_json",
  "tauri",
