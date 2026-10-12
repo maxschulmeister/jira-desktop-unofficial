@@ -1,14 +1,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use tauri::{Manager, WebviewUrl};
+use tauri::webview::{NewWindowFeatures, NewWindowResponse};
+use tauri::{AppHandle, Manager, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
+use tauri_plugin_opener::OpenerExt;
 use uuid::Uuid;
-use std::thread;
-use std::time::Duration;
-use std::collections::HashMap;
-use std::sync::Mutex;
-use once_cell::sync::Lazy;
 
-// Store last titles to prevent duplicate updates
-static LAST_TITLES: Lazy<Mutex<HashMap<String, String>>> = Lazy::new(|| Mutex::new(HashMap::new()));
+const JIRA_WINDOW_PREFIX: &str = "website-window-";
+const NEW_TAB_MENU_ID: &str = "new-tab";
+const BACKGROUND_TAB_PREFIX: &str = "jira-background-tab:";
 
 // WebKit check function for Linux - Version agnostic
 #[cfg(target_os = "linux")]
@@ -55,167 +53,145 @@ fn check_webkit_available() -> bool {
     true
 }
 
-#[tauri::command]
-fn update_window_title(window: tauri::Window, title: String) {
-    let window_label = window.label().to_string();
-    
-    // Check if title has changed to prevent spam
-    let mut last_titles = LAST_TITLES.lock().unwrap();
-    if let Some(last_title) = last_titles.get(&window_label) {
-        if last_title == &title {
-            return; // Skip duplicate update
-        }
+/// Returns the link URL when `new_tab_clicks.js` asks for a background tab.
+fn background_tab_url(url: &Url) -> Option<Url> {
+    url.as_str().strip_prefix(BACKGROUND_TAB_PREFIX)?.parse().ok()
+}
+
+/// Links to the opener's host or to Atlassian open in a new tab. Other links open in the default browser.
+fn opens_in_tab(url: &Url, opener_url: &Url) -> bool {
+    if !matches!(url.scheme(), "http" | "https") {
+        return true;
     }
-    
-    // Store new title
-    last_titles.insert(window_label.clone(), title.clone());
-    
-    println!("📝 Updating title for window '{}' to: {}", window_label, title);
-    if !title.is_empty() && title != "null" && title != "undefined" {
-        let _ = window.set_title(&format!("{} - Jira", title));
+    let Some(host) = url.host_str() else {
+        return true;
+    };
+    let is_atlassian = ["atlassian.net", "atlassian.com"]
+        .iter()
+        .any(|domain| host == *domain || host.ends_with(&format!(".{domain}")));
+    is_atlassian || opener_url.host_str() == Some(host)
+}
+
+/// Builds a Jira window. Pass `features` when the window answers a new window request from a page.
+fn build_jira_window(
+    app: &AppHandle,
+    url: WebviewUrl,
+    features: Option<NewWindowFeatures>,
+) -> tauri::Result<WebviewWindow> {
+    let label = format!("{JIRA_WINDOW_PREFIX}{}", Uuid::new_v4());
+    let app_handle = app.clone();
+    let opener_label = label.clone();
+
+    let mut builder = WebviewWindowBuilder::new(app, &label, url)
+        .title("Jira")
+        .inner_size(1000.0, 700.0)
+        .resizable(true)
+        .initialization_script(include_str!("new_tab_clicks.js"))
+        .on_document_title_changed(|window, title| {
+            let _ = window.set_title(&format!("{title} - Jira"));
+        })
+        .on_new_window(move |url, features| {
+            let Some(opener) = app_handle.get_webview_window(&opener_label) else {
+                return NewWindowResponse::Deny;
+            };
+            let (url, background) = match background_tab_url(&url) {
+                Some(link_url) => (link_url, true),
+                None => (url, false),
+            };
+            let in_tab = opener.url().map_or(false, |opener_url| opens_in_tab(&url, &opener_url));
+            if !in_tab {
+                if let Err(e) = app_handle.opener().open_url(url.as_str(), None::<&str>) {
+                    eprintln!("Failed to open {url} in browser: {e}");
+                }
+                return NewWindowResponse::Deny;
+            }
+            if background {
+                match build_jira_window(&app_handle, WebviewUrl::External(url), None) {
+                    Ok(tab) => add_as_tab(&opener, &tab, true),
+                    Err(e) => eprintln!("Failed to open background tab: {e}"),
+                }
+                return NewWindowResponse::Deny;
+            }
+            let blank = WebviewUrl::External("about:blank".parse().unwrap());
+            match build_jira_window(&app_handle, blank, Some(features)) {
+                Ok(window) => {
+                    add_as_tab(&opener, &window, false);
+                    NewWindowResponse::Create { window }
+                }
+                Err(e) => {
+                    eprintln!("Failed to open new tab: {e}");
+                    NewWindowResponse::Deny
+                }
+            }
+        });
+
+    if let Some(features) = features {
+        builder = builder.window_features(features);
+    }
+    #[cfg(target_os = "macos")]
+    {
+        builder = builder.tabbing_identifier("jira");
+    }
+    builder.build()
+}
+
+/// Shows `tab` as a native tab of `opener`. Only macOS has native window tabs.
+/// With `background`, `opener` stays the selected tab.
+#[cfg(target_os = "macos")]
+fn add_as_tab(opener: &WebviewWindow, tab: &WebviewWindow, background: bool) {
+    use objc2_app_kit::{NSWindow, NSWindowOrderingMode};
+
+    let (opener, tab) = (opener.clone(), tab.clone());
+    let main_thread_opener = opener.clone();
+    let _ = main_thread_opener.run_on_main_thread(move || {
+        let (Ok(opener_ptr), Ok(tab_ptr)) = (opener.ns_window(), tab.ns_window()) else {
+            return;
+        };
+        // SAFETY: Tauri gives valid NSWindow pointers, and this closure runs on the main thread.
+        let (opener, tab) = unsafe { (&*opener_ptr.cast::<NSWindow>(), &*tab_ptr.cast::<NSWindow>()) };
+        opener.addTabbedWindow_ordered(tab, NSWindowOrderingMode::Above);
+        if background {
+            opener.makeKeyAndOrderFront(None);
+        }
+    });
+}
+
+#[cfg(not(target_os = "macos"))]
+fn add_as_tab(opener: &WebviewWindow, _tab: &WebviewWindow, background: bool) {
+    if background {
+        let _ = opener.set_focus();
+    }
+}
+
+/// Opens the page of the focused Jira window in a new tab.
+fn open_new_tab(app: &AppHandle) {
+    let Some(current) = app
+        .webview_windows()
+        .into_values()
+        .find(|w| w.label().starts_with(JIRA_WINDOW_PREFIX) && w.is_focused().unwrap_or(false))
+    else {
+        return;
+    };
+    let Ok(url) = current.url() else {
+        return;
+    };
+    match build_jira_window(app, WebviewUrl::External(url), None) {
+        Ok(tab) => add_as_tab(&current, &tab, false),
+        Err(e) => eprintln!("Failed to open new tab: {e}"),
     }
 }
 
 #[tauri::command]
-async fn open_website_window(app: tauri::AppHandle, url: String) -> Result<(), String> {
-    let hostname = url.replace("https://", "").replace("http://", "").split('/').next().unwrap_or(&url).to_string();
-    let window_id = format!("website-window-{}", Uuid::new_v4());
+async fn open_website_window(app: AppHandle, url: String) -> Result<(), String> {
+    let parsed_url = url.parse().map_err(|e| format!("Invalid URL: {}", e))?;
+    build_jira_window(&app, WebviewUrl::External(parsed_url), None)
+        .map_err(|e| format!("Window creation failed: {}", e))?;
 
-    // Hide the main window
+    // Hide the launcher while Jira windows are open
     if let Some(main_window) = app.get_webview_window("main") {
         let _ = main_window.hide();
     }
-
-    let parsed_url = url.parse().map_err(|e| format!("Invalid URL: {}", e))?;
-    
-    let builder = tauri::WebviewWindowBuilder::new(
-        &app,
-        &window_id,
-        WebviewUrl::External(parsed_url),
-    )
-    .title(&format!("🔄 Loading {}...", hostname))
-    .inner_size(1000.0, 700.0)
-    .resizable(true)
-    .visible(true)
-    .decorations(true);
-
-    match builder.build() {
-        Ok(new_window) => {
-            let app_handle = app.clone();
-            let window_label = new_window.label().to_string();
-            
-            // Clean up stored title when window closes
-            let window_label_clone = window_label.clone();
-            let new_window_for_close = new_window.clone();
-            new_window_for_close.on_window_event(move |event| {
-                if let tauri::WindowEvent::CloseRequested { .. } = event {
-                    let mut last_titles = LAST_TITLES.lock().unwrap();
-                    last_titles.remove(&window_label_clone);
-                    
-                    if let Some(main_window) = app_handle.get_webview_window("main") {
-                        let _ = main_window.show();
-                    }
-                }
-            });
-            
-            // Improved JavaScript with debouncing to prevent spam
-            let js_code = r#"
-                (function() {
-                    console.log('Title updater script injected');
-                    
-                    let lastSentTitle = '';
-                    let debounceTimer = null;
-                    
-                    function sendTitleToTauri() {
-                        if (window.__TAURI__) {
-                            let title = document.title;
-                            if (title && title !== 'null' && title !== 'undefined' && title !== '') {
-                                title = title.trim();
-                                
-                                // Don't send if title hasn't changed
-                                if (title === lastSentTitle) {
-                                    console.log('Title unchanged, skipping:', title);
-                                    return;
-                                }
-                                
-                                // Clear previous debounce timer
-                                if (debounceTimer) {
-                                    clearTimeout(debounceTimer);
-                                }
-                                
-                                // Debounce: wait 100ms before sending
-                                debounceTimer = setTimeout(() => {
-                                    lastSentTitle = title;
-                                    console.log('📄 Sending title to Tauri:', title);
-                                    window.__TAURI__.core.invoke('update_window_title', { title }).catch(err => {
-                                        console.error('Failed to send title:', err);
-                                    });
-                                }, 100);
-                            }
-                        } else {
-                            console.log('Not in Tauri environment');
-                        }
-                    }
-                    
-                    // Send title on page load
-                    if (document.readyState === 'complete') {
-                        sendTitleToTauri();
-                    } else {
-                        document.addEventListener('DOMContentLoaded', sendTitleToTauri);
-                        window.addEventListener('load', sendTitleToTauri);
-                    }
-                    
-                    // Send only once after initial load (not multiple times)
-                    setTimeout(sendTitleToTauri, 500);
-                    
-                    // Observe title changes with debouncing
-                    const observer = new MutationObserver(() => {
-                        console.log('Title mutation detected');
-                        sendTitleToTauri();
-                    });
-                    
-                    const titleElement = document.querySelector('title');
-                    if (titleElement) {
-                        observer.observe(titleElement, { 
-                            subtree: true, 
-                            characterData: true, 
-                            childList: true 
-                        });
-                        console.log('Observing title element');
-                    }
-                    
-                    // Watch for navigation (SPA) with debouncing
-                    let lastUrl = location.href;
-                    const urlObserver = new MutationObserver(() => {
-                        const url = location.href;
-                        if (url !== lastUrl) {
-                            lastUrl = url;
-                            console.log('URL changed, updating title');
-                            sendTitleToTauri();
-                        }
-                    });
-                    
-                    // Only observe if document.body exists
-                    if (document.body) {
-                        urlObserver.observe(document.body, { subtree: true, childList: true });
-                    }
-                    
-                    // Initial send
-                    sendTitleToTauri();
-                })();
-            "#;
-            
-            // Inject script once (not multiple times)
-            let new_window_clone = new_window.clone();
-            thread::spawn(move || {
-                thread::sleep(Duration::from_millis(800));
-                let _ = new_window_clone.eval(js_code);
-            });
-            
-            Ok(())
-        }
-        Err(e) => Err(format!("Window creation failed: {}", e)),
-    }
+    Ok(())
 }
 
 fn main() {
@@ -241,17 +217,119 @@ fn main() {
     }
 
     tauri::Builder::default()
-        .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![
-            open_website_window,
-            update_window_title  
-        ])
+        // The default link script cancels target="_blank" clicks and calls IPC, which Jira pages cannot use.
+        // Without it, the links get to on_new_window.
+        .plugin(
+            tauri_plugin_opener::Builder::new()
+                .open_js_links_on_click(false)
+                .build(),
+        )
+        .invoke_handler(tauri::generate_handler![open_website_window])
+        .on_menu_event(|app, event| {
+            if event.id() == NEW_TAB_MENU_ID {
+                open_new_tab(app);
+            }
+        })
+        .on_window_event(|window, event| {
+            // Show the launcher again when the last Jira window closes
+            if let tauri::WindowEvent::Destroyed = event {
+                let label = window.label();
+                if !label.starts_with(JIRA_WINDOW_PREFIX) {
+                    return;
+                }
+                let app = window.app_handle();
+                let jira_window_open = app
+                    .webview_windows()
+                    .keys()
+                    .any(|other| other.starts_with(JIRA_WINDOW_PREFIX) && other != label);
+                if !jira_window_open {
+                    if let Some(main_window) = app.get_webview_window("main") {
+                        let _ = main_window.show();
+                    }
+                }
+            }
+        })
         .setup(|app| {
             if let Some(main_window) = app.get_webview_window("main") {
                 main_window.set_title("Jira")?;
+            }
+            // Add "New Tab" (⌘T) to the File menu. ⌘W in the default menu closes a tab.
+            #[cfg(target_os = "macos")]
+            if let Some(menu) = app.menu() {
+                let file_menu = menu.items()?.into_iter().find_map(|item| {
+                    item.as_submenu()
+                        .filter(|submenu| submenu.text().is_ok_and(|text| text == "File"))
+                        .cloned()
+                });
+                if let Some(file_menu) = file_menu {
+                    let new_tab = tauri::menu::MenuItem::with_id(
+                        app,
+                        NEW_TAB_MENU_ID,
+                        "New Tab",
+                        true,
+                        Some("CmdOrCtrl+T"),
+                    )?;
+                    file_menu.prepend(&new_tab)?;
+                }
             }
             Ok(())
         })
         .run(tauri::generate_context!())
         .expect("error while running tauri app");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{background_tab_url, opens_in_tab};
+
+    #[test]
+    fn background_prefix_gives_link_url() {
+        let url = "jira-background-tab:https://acme.atlassian.net/browse/ABC-1?a=1#c".parse().unwrap();
+        assert_eq!(
+            background_tab_url(&url).map(String::from),
+            Some("https://acme.atlassian.net/browse/ABC-1?a=1#c".to_string())
+        );
+    }
+
+    #[test]
+    fn normal_link_is_not_a_background_tab() {
+        let url = "https://acme.atlassian.net/browse/ABC-1".parse().unwrap();
+        assert_eq!(background_tab_url(&url), None);
+    }
+
+    fn check(url: &str, opener: &str) -> bool {
+        opens_in_tab(&url.parse().unwrap(), &opener.parse().unwrap())
+    }
+
+    #[test]
+    fn jira_ticket_link_opens_in_tab() {
+        assert!(check(
+            "https://acme.atlassian.net/browse/ABC-1",
+            "https://acme.atlassian.net/jira/software/projects/ABC/boards/1"
+        ));
+    }
+
+    #[test]
+    fn same_host_on_self_hosted_jira_opens_in_tab() {
+        assert!(check("https://jira.acme.com/browse/ABC-1", "https://jira.acme.com/secure/Dashboard.jspa"));
+    }
+
+    #[test]
+    fn other_atlassian_hosts_open_in_tab() {
+        let opener = "https://acme.atlassian.net/browse/ABC-1";
+        assert!(check("https://id.atlassian.com/manage-profile", opener));
+        assert!(check("https://other.atlassian.net/wiki", opener));
+    }
+
+    #[test]
+    fn blank_page_opens_in_tab() {
+        assert!(check("about:blank", "https://acme.atlassian.net/browse/ABC-1"));
+    }
+
+    #[test]
+    fn external_link_opens_in_browser() {
+        let opener = "https://acme.atlassian.net/browse/ABC-1";
+        assert!(!check("https://github.com/acme/repo/pull/1", opener));
+        assert!(!check("https://evil-atlassian.net/", opener));
+    }
 }
