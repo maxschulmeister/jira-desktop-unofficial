@@ -6,6 +6,7 @@ use uuid::Uuid;
 
 const JIRA_WINDOW_PREFIX: &str = "website-window-";
 const NEW_TAB_MENU_ID: &str = "new-tab";
+const BACKGROUND_TAB_PREFIX: &str = "jira-background-tab:";
 
 // WebKit check function for Linux - Version agnostic
 #[cfg(target_os = "linux")]
@@ -52,6 +53,11 @@ fn check_webkit_available() -> bool {
     true
 }
 
+/// Returns the link URL when `new_tab_clicks.js` asks for a background tab.
+fn background_tab_url(url: &Url) -> Option<Url> {
+    url.as_str().strip_prefix(BACKGROUND_TAB_PREFIX)?.parse().ok()
+}
+
 /// Links to the opener's host or to Atlassian open in a new tab. Other links open in the default browser.
 fn opens_in_tab(url: &Url, opener_url: &Url) -> bool {
     if !matches!(url.scheme(), "http" | "https") {
@@ -80,12 +86,17 @@ fn build_jira_window(
         .title("Jira")
         .inner_size(1000.0, 700.0)
         .resizable(true)
+        .initialization_script(include_str!("new_tab_clicks.js"))
         .on_document_title_changed(|window, title| {
             let _ = window.set_title(&format!("{title} - Jira"));
         })
         .on_new_window(move |url, features| {
             let Some(opener) = app_handle.get_webview_window(&opener_label) else {
                 return NewWindowResponse::Deny;
+            };
+            let (url, background) = match background_tab_url(&url) {
+                Some(link_url) => (link_url, true),
+                None => (url, false),
             };
             let in_tab = opener.url().map_or(false, |opener_url| opens_in_tab(&url, &opener_url));
             if !in_tab {
@@ -94,10 +105,17 @@ fn build_jira_window(
                 }
                 return NewWindowResponse::Deny;
             }
+            if background {
+                match build_jira_window(&app_handle, WebviewUrl::External(url), None) {
+                    Ok(tab) => add_as_tab(&opener, &tab, true),
+                    Err(e) => eprintln!("Failed to open background tab: {e}"),
+                }
+                return NewWindowResponse::Deny;
+            }
             let blank = WebviewUrl::External("about:blank".parse().unwrap());
             match build_jira_window(&app_handle, blank, Some(features)) {
                 Ok(window) => {
-                    add_as_tab(&opener, &window);
+                    add_as_tab(&opener, &window, false);
                     NewWindowResponse::Create { window }
                 }
                 Err(e) => {
@@ -118,8 +136,9 @@ fn build_jira_window(
 }
 
 /// Shows `tab` as a native tab of `opener`. Only macOS has native window tabs.
+/// With `background`, `opener` stays the selected tab.
 #[cfg(target_os = "macos")]
-fn add_as_tab(opener: &WebviewWindow, tab: &WebviewWindow) {
+fn add_as_tab(opener: &WebviewWindow, tab: &WebviewWindow, background: bool) {
     use objc2_app_kit::{NSWindow, NSWindowOrderingMode};
 
     let (opener, tab) = (opener.clone(), tab.clone());
@@ -131,11 +150,18 @@ fn add_as_tab(opener: &WebviewWindow, tab: &WebviewWindow) {
         // SAFETY: Tauri gives valid NSWindow pointers, and this closure runs on the main thread.
         let (opener, tab) = unsafe { (&*opener_ptr.cast::<NSWindow>(), &*tab_ptr.cast::<NSWindow>()) };
         opener.addTabbedWindow_ordered(tab, NSWindowOrderingMode::Above);
+        if background {
+            opener.makeKeyAndOrderFront(None);
+        }
     });
 }
 
 #[cfg(not(target_os = "macos"))]
-fn add_as_tab(_opener: &WebviewWindow, _tab: &WebviewWindow) {}
+fn add_as_tab(opener: &WebviewWindow, _tab: &WebviewWindow, background: bool) {
+    if background {
+        let _ = opener.set_focus();
+    }
+}
 
 /// Opens the page of the focused Jira window in a new tab.
 fn open_new_tab(app: &AppHandle) {
@@ -150,7 +176,7 @@ fn open_new_tab(app: &AppHandle) {
         return;
     };
     match build_jira_window(app, WebviewUrl::External(url), None) {
-        Ok(tab) => add_as_tab(&current, &tab),
+        Ok(tab) => add_as_tab(&current, &tab, false),
         Err(e) => eprintln!("Failed to open new tab: {e}"),
     }
 }
@@ -254,7 +280,22 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-    use super::opens_in_tab;
+    use super::{background_tab_url, opens_in_tab};
+
+    #[test]
+    fn background_prefix_gives_link_url() {
+        let url = "jira-background-tab:https://acme.atlassian.net/browse/ABC-1?a=1#c".parse().unwrap();
+        assert_eq!(
+            background_tab_url(&url).map(String::from),
+            Some("https://acme.atlassian.net/browse/ABC-1?a=1#c".to_string())
+        );
+    }
+
+    #[test]
+    fn normal_link_is_not_a_background_tab() {
+        let url = "https://acme.atlassian.net/browse/ABC-1".parse().unwrap();
+        assert_eq!(background_tab_url(&url), None);
+    }
 
     fn check(url: &str, opener: &str) -> bool {
         opens_in_tab(&url.parse().unwrap(), &opener.parse().unwrap())
